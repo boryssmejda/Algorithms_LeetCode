@@ -5,4 +5,5 @@ using std::vector;
 class Solution {
 public:
     double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2);
+    double search_bin(vector<int>& shorter, vector<int>& longer);
 };
