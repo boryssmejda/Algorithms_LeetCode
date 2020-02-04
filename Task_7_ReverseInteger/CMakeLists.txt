@@ -11,8 +11,6 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # Detect compiler and set proper flags
 if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pedantic -Wall -Wextra -Wshadow")
-elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
 endif()
 
 
@@ -51,6 +49,10 @@ SET(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 # Link runTests with what we want to test and the GTest and pthread library
 add_executable(runTests tests.cpp)
 target_link_libraries(runTests ${GTEST_LIBRARIES} pthread ${LIB_NAME})
+
+#include(CTest)
+enable_testing()
+add_test(NAME runTests COMMAND runTests)
 
 INSTALL(FILES solution.hpp DESTINATION ${PROJECT_BINARY_DIR}/include)
 INSTALL(TARGETS runTests RUNTIME DESTINATION ${PROJECT_BINARY_DIR}/bin)
