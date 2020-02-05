@@ -1,34 +1,41 @@
 #include "solution.hpp"
-#include <iterator>
+#include <climits>
 
-string Solution::longestPalindrome(string s)
+int Solution::reverse(int x)
 {
-    if(s.length() <= 1)
-        return s;
+    if(x >= -9 && x <= 9)
+        return x;
 
-    string max = s.substr(0, 1);
-
-    for(int i = 0; i < s.length(); ++i)
+    bool isNegative;
+    if(x < 0)
     {
-        string temp = expand(s, i, i);
-        if(temp.length() > max.length())
-            max = temp;
+        isNegative = true;
+        if(x == INT_MIN)
+            return 0;
 
-        temp = expand(s, i, i+1);
-        if(temp.length() > max.length())
-            max = temp;
+        x = -x;
+    }
+    else
+        isNegative = false;
+
+    int result{0};
+
+    while(x > 0)
+    {
+        int tmp = x % 10;
+
+        if (result > INT_MAX / 10)
+            return 0;
+        else if(result == INT_MAX / 10 && tmp > 7)
+            return 0;
+        
+        result = result * 10 + tmp;
+
+        x /= 10;
     }
 
-    return max;
-}
+    if(isNegative)
+        return -1*result;
 
-string Solution::expand(string t_s, int t_left, int t_right)
-{
-    while(t_left >= 0 && t_right <= t_s.length() - 1 && t_s[t_left] == t_s[t_right])
-    {
-        --t_left;
-        ++t_right;
-    }
-
-    return t_s.substr(t_left + 1, t_right - t_left - 1);
+    return result;  
 }
