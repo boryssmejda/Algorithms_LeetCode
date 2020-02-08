@@ -9,14 +9,19 @@ int Solution::myAtoi(std::string str)
     if(isEmpty(str))
         return 0;
 
+    //Find first number, or number's sign +/-
     int firstNonEmptyPos{-1};
-    for(int i = 0; i < str.length(); ++i)
+    for(int i = 0; i < static_cast<int>(str.length()); ++i)
     {
-        if(isalnum(str[i]))
+        if(isdigit(str[i]) || str[i] == '-' || str[i] == '+')
         {
             firstNonEmptyPos = i;
             break;
         }
+        else if(str[i] == ' ')
+            continue;
+        else
+            return 0;
     }
 
     bool isNegative{false};
@@ -30,15 +35,37 @@ int Solution::myAtoi(std::string str)
         ++firstNonEmptyPos;
         isNegative = false;
     }
-
-
-    int result{0};
-    for(int i = firstNonEmptyPos; i < str.length(); ++i)
+    else if(isdigit(str[firstNonEmptyPos]))
     {
+        isNegative = false;
+    }
+    else
+    {
+        return 0;
+    }
+    
 
+    //Actual string to number conversion
+    int result{0};
+    for(int i = firstNonEmptyPos; i < static_cast<int>(str.length()); ++i)
+    {
+        if(!isdigit(str[i]))
+            return (isNegative ? -result : result);
+
+        int tmp = static_cast<int>(str[i] - '0');
+        if(result > INT_MAX/10)
+        {
+            return overflowCase(isNegative);
+        }
+        else if(result == INT_MAX / 10 && tmp > 7)
+        {
+            return overflowCase(isNegative);
+        }
+
+        result = result * 10 + tmp;
     }
 
-    return -1;
+    return (isNegative ? -result : result);
 }
 
 bool Solution::isEmpty(std::string str)
@@ -51,4 +78,12 @@ bool Solution::isEmpty(std::string str)
             return false;
     
     return true;
+}
+
+inline int Solution::overflowCase(bool t_isNegative)
+{
+    if(t_isNegative)
+        return INT_MIN;
+
+    return INT_MAX;
 }

@@ -9,5 +9,7 @@ public:
     
 private:
     bool isEmpty(std::string t_str);
+    bool startsWithNumber(std::string t_str);
+    int overflowCase(bool t_isNegative);
 
 };
